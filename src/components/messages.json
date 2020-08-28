@@ -1,0 +1,28 @@
+{
+  "messages": [
+    {
+      "id": 1,
+      "text": "Hi there!",
+      "sender": "user1",
+      "timestamp": "Sat Aug 28 2020 03:20:06 GMT+0530 (India Standard Time)"
+    },
+    {
+      "id": 2,
+      "text": "Hey",
+      "sender": "user2",
+      "timestamp": "Sat Aug 28 2020 03:22:06 GMT+0530 (India Standard Time)"
+    },
+    {
+      "id": 3,
+      "text": "How are you doing?",
+      "sender": "user1",
+      "timestamp": "Sat Aug 29 2020 04:20:06 GMT+0530 (India Standard Time)"
+    },
+    {
+      "id": 4,
+      "text": "I am perfectly fine what about you? Are you doing good?",
+      "sender": "user2",
+      "timestamp": "Sat Aug 29 2020 08:40:00 GMT+0530 (India Standard Time)"
+    }
+  ]
+}
