@@ -6,6 +6,10 @@
   height: 40px;
 }
 
+.chat-item-wrapper:hover {
+  cursor: pointer;
+}
+
 .chat-item-left {
   width: 10%;
   min-width: 40px;

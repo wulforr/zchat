@@ -8,8 +8,6 @@
 }
 .chat-message-wrapper {
   width: 100%;
-  /* min-height: 20px; */
-  height: auto;
 }
 .chat-message-left {
   background-image: linear-gradient(to right, #1986d7, #7a9cc1);
