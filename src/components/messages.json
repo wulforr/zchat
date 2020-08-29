@@ -22,7 +22,37 @@
       "id": 4,
       "text": "I am perfectly fine what about you? Are you doing good?",
       "sender": "user2",
-      "timestamp": "Sat Aug 29 2020 08:40:00 GMT+0530 (India Standard Time)"
+      "timestamp": "Sat Aug 29 2020 06:40:00 GMT+0530 (India Standard Time)"
+    },
+    {
+      "id": 5,
+      "text": "How are feeling nowadays",
+      "sender": "user2",
+      "timestamp": "Sat Aug 29 2020 07:40:00 GMT+0530 (India Standard Time)"
+    },
+    {
+      "id": 6,
+      "text": "Yeah I am feeling good, I have improved a lot and am confident about my recovery, hoping to see you soon",
+      "sender": "user1",
+      "timestamp": "Sat Aug 29 2020 08:04:00 GMT+0530 (India Standard Time)"
+    },
+    {
+      "id": 7,
+      "text": "Yeah I am feeling good, I have improved a lot and am confident about my recovery, hoping to see you soon",
+      "sender": "user1",
+      "timestamp": "Sat Aug 29 2020 08:04:00 GMT+0530 (India Standard Time)"
+    },
+    {
+      "id": 8,
+      "text": "Yeah I am feeling good, I have improved a lot and am confident about my recovery, hoping to see you soon",
+      "sender": "user2",
+      "timestamp": "Sat Aug 29 2020 08:04:00 GMT+0530 (India Standard Time)"
+    },
+    {
+      "id": 9,
+      "text": "Yeah I am feeling good, I have improved a lot and am confident about my recovery, hoping to see you soon",
+      "sender": "user1",
+      "timestamp": "Sat Aug 29 2020 08:04:00 GMT+0530 (India Standard Time)"
     }
   ]
 }

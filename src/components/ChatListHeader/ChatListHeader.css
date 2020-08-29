@@ -7,6 +7,9 @@
   justify-content: flex-start;
   align-items: center;
   padding-left: 5%;
+  position: sticky;
+  top: 0;
+  background-color: #202023;
 }
 
 .chat-list-header-avatar {
@@ -14,4 +17,14 @@
   border-radius: 50%;
   width: 30px;
   height: 30px;
+}
+
+.chat-list-header-avatar img {
+  width: 100%;
+  border-radius: 50%;
+}
+
+.chat-list-header-name {
+  font-size: 20px;
+  margin-left: 2%;
 }

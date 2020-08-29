@@ -2,6 +2,9 @@
   display: flex;
   flex-wrap: wrap;
   width: 100%;
+  height: calc(100% - 260px);
+  margin-bottom: 10px;
+  overflow-y: scroll;
 }
 .chat-message-wrapper {
   width: 100%;
@@ -9,15 +12,13 @@
   height: auto;
 }
 .chat-message-left {
-  background-color: dodgerblue;
+  background-image: linear-gradient(to right, #1986d7, #7a9cc1);
   float: left;
-  text-align: left;
 }
 
 .chat-message-right {
-  background-color: teal;
+  background-color: #f08080;
   float: right;
-  text-align: right;
 }
 
 .chat-message-left,
@@ -26,6 +27,7 @@
   max-width: 70%;
   padding: 10px 30px;
   margin: 10px 20px;
-  font-size: 20px;
+  font-size: 16px;
   border-radius: 2px;
+  text-align: left;
 }
