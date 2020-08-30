@@ -4,6 +4,7 @@ import "./ChatMessages.css";
 export default function ChatMessages({ currentChat }) {
   const ChatMessagesContainerRef = useRef(null);
 
+  // to scroll to the bottom of the chat so that most recent message is in view
   useEffect(() => {
     ChatMessagesContainerRef.current.scrollTop =
       ChatMessagesContainerRef.current.scrollHeight;

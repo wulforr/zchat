@@ -12,11 +12,13 @@
 .chat-message-left {
   background-image: linear-gradient(to right, #1986d7, #7a9cc1);
   float: left;
+  border-radius: 0px 10px 10px 0px;
 }
 
 .chat-message-right {
   background-color: #f08080;
   float: right;
+  border-radius: 10px 0px 0px 10px;
 }
 
 .chat-message-left,
@@ -26,6 +28,5 @@
   padding: 10px 30px;
   margin: 10px 20px;
   font-size: 16px;
-  border-radius: 2px;
   text-align: left;
 }

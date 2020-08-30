@@ -16,7 +16,6 @@ export default function ChatItem({ data, setCurrentChat }) {
         <div className="chat-item-last-message">
           {getFormattedText(data.messages.slice(-1)[0].text, 25)}
         </div>
-        {/* <div className="chat-item-unread">unread</div> */}
       </div>
     </div>
   );

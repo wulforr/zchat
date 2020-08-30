@@ -2,6 +2,7 @@ import faker from "faker";
 
 const usersArray = ["user1", "user2"];
 
+// generate an array of fake messages
 const generateMessages = () => {
   const numberOfMessages = Math.floor(Math.random() * 20) + 5;
   const messages = [];
@@ -16,6 +17,7 @@ const generateMessages = () => {
   return messages;
 };
 
+// generate fake chat data using faker
 export const generateData = () => {
   const data = [];
   const numberOfChats = Math.floor(Math.random() * 5) + 1;

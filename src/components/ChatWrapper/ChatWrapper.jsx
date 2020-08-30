@@ -6,7 +6,7 @@ import ChatSearchBar from "../ChatSearchBar/ChatSearchBar";
 import ChatDetailsHeader from "../ChatDetailsHeader/ChatDetailsHeader";
 import ChatMessages from "../ChatMessages/ChatMessages";
 import ChatInput from "../ChatInput/ChatInput";
-import { generateData } from "../fakedata";
+import { generateData } from "../../utils/fakedata";
 import { useEffect } from "react";
 import { addMessage } from "../../utils/utils";
 
@@ -24,26 +24,25 @@ export default function ChatWrapper() {
     setFilteredData(tempData);
   }, []);
 
-  console.log(filteredData);
-
+  // filtering data according to search query and sorting it according to time so most recent chat will be shown at top
   useEffect(() => {
     if (data) {
       let tempFilteredData = data.filter((ele) =>
         new RegExp(searchQuery, "gi").test(ele.name)
       );
 
-      tempFilteredData = tempFilteredData.sort(
+      let tempFilteredSortedData = tempFilteredData.sort(
         (a, b) =>
           new Date(b.messages.slice(-1)[0].time) -
           new Date(a.messages.slice(-1)[0].time)
       );
-      setFilteredData(tempFilteredData);
+      setFilteredData(tempFilteredSortedData);
     }
   }, [searchQuery, data]);
 
+  //adding message to the data and then updating state and current chat after adding message and clearing the input field
   const addMsg = (msg) => {
     const updatedData = addMessage(data, msg, currentChat.id);
-    //updating data and current chat after adding message and clearing the input field
     setData(updatedData);
     setCurrentChat(updatedData.filter((ele) => ele.id === currentChat.id)[0]);
     setInputValue("");
@@ -86,6 +85,6 @@ export default function ChatWrapper() {
       </div>
     </div>
   ) : (
-    <div>Loading</div>
+    <div>Please wait while we gather the data</div>
   );
 }
