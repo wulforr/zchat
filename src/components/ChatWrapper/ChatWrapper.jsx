@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./ChatWrapper.css";
 import ChatItem from "../ChatItem/ChatItem";
 import ChatListHeader from "../ChatListHeader/ChatListHeader";
@@ -7,8 +7,9 @@ import ChatDetailsHeader from "../ChatDetailsHeader/ChatDetailsHeader";
 import ChatMessages from "../ChatMessages/ChatMessages";
 import ChatInput from "../ChatInput/ChatInput";
 import { generateData } from "../../utils/fakedata";
-import { useEffect } from "react";
 import { addMessage } from "../../utils/utils";
+import AddChat from "../AddChat/AddChat";
+import { addChatUser } from "../../utils/utils";
 
 export default function ChatWrapper() {
   const [data, setData] = useState(null);
@@ -16,6 +17,8 @@ export default function ChatWrapper() {
   const [currentChat, setCurrentChat] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredData, setFilteredData] = useState(null);
+
+  const chatListref = useRef(null);
 
   // add some fake data
   useEffect(() => {
@@ -31,11 +34,18 @@ export default function ChatWrapper() {
         new RegExp(searchQuery, "gi").test(ele.name)
       );
 
-      let tempFilteredSortedData = tempFilteredData.sort(
-        (a, b) =>
-          new Date(b.messages.slice(-1)[0].time) -
-          new Date(a.messages.slice(-1)[0].time)
-      );
+      let tempFilteredSortedData = tempFilteredData.sort((a, b) => {
+        if (a.messages.length === 0) {
+          return true;
+        } else if (b.messages.length === 0) {
+          return true;
+        } else {
+          return (
+            new Date(b.messages.slice(-1)[0].time) -
+            new Date(a.messages.slice(-1)[0].time)
+          );
+        }
+      });
       setFilteredData(tempFilteredSortedData);
     }
   }, [searchQuery, data]);
@@ -48,16 +58,37 @@ export default function ChatWrapper() {
     setInputValue("");
   };
 
+  const addChat = (name) => {
+    const updatedData = addChatUser(data, name);
+    setData(updatedData);
+  };
+
   return data && data.length ? (
     <div className="chat-container">
-      <div className="chat-list">
-        <ChatListHeader />
+      <div
+        className="chat-hamburger"
+        onClick={() => {
+          chatListref.current.classList.add("chat-list-show");
+        }}
+      >
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <div className="chat-list" ref={chatListref}>
+        <ChatListHeader chatListref={chatListref} />
         <ChatSearchBar
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
         />
+        <AddChat addChat={addChat} />
         {filteredData.map((ele) => (
-          <ChatItem key={ele.id} data={ele} setCurrentChat={setCurrentChat} />
+          <ChatItem
+            key={ele.id}
+            data={ele}
+            setCurrentChat={setCurrentChat}
+            chatListref={chatListref}
+          />
         ))}
       </div>
       <div className="chat-details">

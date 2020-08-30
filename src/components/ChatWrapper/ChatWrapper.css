@@ -21,6 +21,7 @@
   min-width: 500px;
   height: 100%;
   background-color: #19191b;
+  overflow: hidden;
 }
 
 .chat-initial-screen {
@@ -50,9 +51,58 @@
   border-bottom: 2px solid rgba(220, 220, 220, 0.5);
 }
 
+.chat-hamburger {
+  display: none;
+}
+
 @media only screen and (max-width: 1200px) {
   .chat-container {
     width: 100vw;
     height: 100vh;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .chat-list {
+    width: 60vw;
+    height: 100vh;
+    position: absolute;
+    left: -100%;
+    transition: 1s ease-in-out;
+  }
+  .chat-hamburger {
+    display: block;
+    position: fixed;
+    padding: 15px 5%;
+    font-size: 24px;
+  }
+  .chat-hamburger div {
+    border: 1px solid white;
+    width: 15px;
+    margin: 5px;
+  }
+  .chat-list-show {
+    left: 0;
+  }
+  .chat-details {
+    width: 100%;
+    min-width: 0px;
+  }
+
+  .chat-initial-screen {
+    width: 100%;
+    padding: 25% 0%;
+  }
+
+  .chat-initial-screen img {
+    width: 150px;
+    height: 150px;
+  }
+
+  .chat-initial-screen-text {
+    width: 90%;
+    font-size: 18px;
+    padding: 8px 12px;
+    border-bottom: 2px solid rgba(220, 220, 220, 0.5);
   }
 }

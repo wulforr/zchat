@@ -49,6 +49,7 @@ This will start the application on port 3000 in your default browser.
 
 - You can search for people to chat with
 - You can send messages to people
+- You can add new people and chat with them
 - Chat List on left shows a list of people with last message of the chat and time of last message
 - On sending a message the Chat List updates accordingly and shows most recent chat on top
 

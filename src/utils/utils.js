@@ -14,6 +14,9 @@ export const getFormattedText = (text, maxLength) => {
 //the time is formated in such a way that if difference between current and last message date
 // is greater than 6 days it will show date else it will show day and if date is same then it will show time
 export const getTime = (data) => {
+  if (data.messages.length === 0) {
+    return "";
+  }
   const lastMessageTime = data.messages.slice(-1)[0].time;
   const lastMessageDate = new Date(lastMessageTime);
   const currentDate = new Date();
@@ -57,4 +60,17 @@ export const addMessage = (data, message, chatId) => {
     return ele;
   });
   return updatedData;
+};
+
+export const addChatUser = (data, name) => {
+  return [
+    ...data,
+    {
+      id: faker.random.uuid(),
+      name: name,
+      image: faker.image.avatar(),
+      status: faker.lorem.text(),
+      messages: [],
+    },
+  ];
 };

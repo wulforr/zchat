@@ -1,0 +1,25 @@
+.add-chat {
+  width: 90%;
+  padding: 2% 5%;
+  text-align: right;
+  font-size: 20px;
+}
+
+.add-chat-text {
+  color: #1e87d6;
+  width: 40%;
+  min-width: 100px;
+  float: right;
+  cursor: pointer;
+}
+
+.add-chat-text svg {
+  font-size: 24px;
+  margin-bottom: -4px;
+}
+
+@media only screen and (max-width: 600px) {
+  .add-chat-text {
+    width: 70%;
+  }
+}

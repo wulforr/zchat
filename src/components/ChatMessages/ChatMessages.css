@@ -1,6 +1,4 @@
 .chat-messages-container {
-  display: flex;
-  flex-wrap: wrap;
   width: 100%;
   height: calc(100% - 260px);
   margin-bottom: 10px;
@@ -8,6 +6,8 @@
 }
 .chat-message-wrapper {
   width: 100%;
+  height: auto;
+  overflow: auto;
 }
 .chat-message-left {
   background-image: linear-gradient(to right, #1986d7, #7a9cc1);
@@ -29,4 +29,10 @@
   margin: 10px 20px;
   font-size: 16px;
   text-align: left;
+}
+
+@media only screen and (max-width: 600px) {
+  .chat-messages-container {
+    height: calc(100% - 160px);
+  }
 }

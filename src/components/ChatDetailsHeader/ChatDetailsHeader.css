@@ -29,3 +29,34 @@
   width: 110px;
   float: right;
 }
+
+@media only screen and (max-width: 600px) {
+  .chat-details-header-wrapper {
+    height: 30px;
+    justify-content: flex-end;
+    padding: 15px;
+    text-align: right;
+  }
+
+  .chat-details-header-left {
+    width: 70%;
+    text-align: left;
+  }
+
+  .chat-details-header-name {
+    font-size: 20px;
+    text-align: right;
+  }
+
+  .chat-details-header-status {
+    display: none;
+  }
+
+  .chat-details-header-right {
+    display: none;
+  }
+
+  .chat-details-header-image img {
+    display: none;
+  }
+}
