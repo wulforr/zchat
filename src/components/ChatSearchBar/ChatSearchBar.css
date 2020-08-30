@@ -1,0 +1,15 @@
+.searchbar-wrapper {
+  width: calc(100%-20px);
+  height: 40px;
+  padding: 10px;
+}
+
+.searchbar {
+  width: 90%;
+  border: none;
+  border-radius: 4px;
+  padding: 7px 10px;
+  background-color: #050505;
+  color: #ffffff;
+  font-size: 14px;
+}

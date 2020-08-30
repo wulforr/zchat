@@ -23,6 +23,33 @@
   background-color: #19191b;
 }
 
+.chat-initial-screen {
+  width: 90%;
+  height: 70%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  padding: 15% 5%;
+}
+
+.chat-initial-image-wrapper {
+  width: 100%;
+}
+
+.chat-initial-screen img {
+  border: 15px solid #ffffff;
+  border-radius: 50%;
+  width: 200px;
+  height: 200px;
+}
+
+.chat-initial-screen-text {
+  font-size: 20px;
+  padding: 8px 12px;
+  border-bottom: 2px solid rgba(220, 220, 220, 0.5);
+}
+
 @media only screen and (max-width: 1200px) {
   .chat-container {
     width: 100vw;

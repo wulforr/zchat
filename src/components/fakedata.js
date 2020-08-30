@@ -9,7 +9,7 @@ const generateMessages = () => {
     messages.push({
       messageId: faker.random.uuid(),
       text: faker.lorem.text(),
-      time: faker.date.between("2020-05-22", "2020-08-10"),
+      time: faker.date.between("2020-06-1", "2020-08-30"),
       sender: usersArray[Math.floor(Math.random() * 2)],
     });
   }

@@ -12,6 +12,20 @@ export const getFormattedText = (text, maxLength) => {
 export const getTime = (data) => {
   const tempTime = data.messages.slice(-1)[0];
   const d = new Date(tempTime.time);
+  const currentDate = new Date();
+
+  if (currentDate.getFullYear() - d.getFullYear() > 0) {
+    return d.toLocaleDateString();
+  } else if (currentDate.getMonth() - d.getMonth() > 0) {
+    return d.toLocaleDateString();
+  } else if (currentDate.getDate() - d.getDate() > 6) {
+    return d.toLocaleDateString();
+  } else if (currentDate.getDate() - d.getDate() > 0) {
+    return d.toLocaleDateString([], {
+      weekday: "long",
+    });
+  }
+
   const time = d.toLocaleTimeString([], {
     hour: "2-digit",
     minute: "2-digit",
