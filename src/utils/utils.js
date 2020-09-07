@@ -22,13 +22,13 @@ export const getTime = (data) => {
   const currentDate = new Date();
 
   if (currentDate.getFullYear() - lastMessageDate.getFullYear() > 0) {
-    return lastMessageDate.toLocaleDateString();
+    return lastMessageDate.toLocaleDateString(["en-GB"]);
   } else if (currentDate.getMonth() - lastMessageDate.getMonth() > 0) {
-    return lastMessageDate.toLocaleDateString();
+    return lastMessageDate.toLocaleDateString(["en-GB"]);
   } else if (currentDate.getDate() - lastMessageDate.getDate() > 6) {
-    return lastMessageDate.toLocaleDateString();
+    return lastMessageDate.toLocaleDateString(["en-GB"]);
   } else if (currentDate.getDate() - lastMessageDate.getDate() > 0) {
-    return lastMessageDate.toLocaleDateString([], {
+    return lastMessageDate.toLocaleDateString(["en-GB"], {
       weekday: "long",
     });
   }
