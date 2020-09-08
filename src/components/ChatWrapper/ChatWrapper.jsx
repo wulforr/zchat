@@ -10,6 +10,7 @@ import { generateData } from "../../utils/fakedata";
 import { addMessage } from "../../utils/utils";
 import AddChat from "../AddChat/AddChat";
 import { addChatUser } from "../../utils/utils";
+import * as firestoreService from "../../utils/firebase";
 
 export default function ChatWrapper() {
   const [data, setData] = useState(null);
@@ -25,6 +26,14 @@ export default function ChatWrapper() {
     let tempData = generateData();
     setData(tempData);
     setFilteredData(tempData);
+  }, []);
+
+  useEffect(() => {
+    async function authListener() {
+      const currentUser = await firestoreService.authWatcher();
+      console.log(currentUser);
+    }
+    authListener();
   }, []);
 
   // filtering data according to search query and sorting it according to time so most recent chat will be shown at top
@@ -61,7 +70,10 @@ export default function ChatWrapper() {
   const addChat = (name) => {
     const updatedData = addChatUser(data, name);
     setData(updatedData);
+    firestoreService.addChat(name);
   };
+
+  console.log(firestoreService.getChats());
 
   return data && data.length ? (
     <div className="chat-container">

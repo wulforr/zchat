@@ -57,8 +57,8 @@ export default function Signup() {
         <div className="signup-error-msg">{errorMsgText}</div>
         <div className="loginText">
           Already a user
-          <Link to="/login" className="loginTextLink loginText">
-            {" Login"}
+          <Link to="/signup" className="loginTextLink loginText">
+            {" Signup"}
           </Link>
         </div>
       </div>
