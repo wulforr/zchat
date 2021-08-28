@@ -1,6 +1,11 @@
 import firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/firestore";
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore/lite";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDRkFUu1LTxaA1SRw1eT_qfBDKcEty_oDo",
@@ -13,21 +18,23 @@ const firebaseConfig = {
   measurementId: "G-79Z0B5HCEK",
 };
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth();
+
+export const currentUser = auth.currentUser;
 
 export const signUp = (email, password) => {
-  return firebase.auth().createUserWithEmailAndPassword(email, password);
+  return createUserWithEmailAndPassword(auth, email, password);
 };
 
 export const login = (email, password) => {
-  return firebase.auth().signInWithEmailAndPassword(email, password);
+  return signInWithEmailAndPassword(auth, email, password);
 };
 
 export const addUser = (email, name) => {
   return db.collection("users").add({
     email: email,
     name: name,
-    chats: [],
   });
 };
