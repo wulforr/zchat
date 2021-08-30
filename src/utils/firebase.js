@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore/lite";
+import { getFirestore, collection, addDoc } from "firebase/firestore/lite";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -31,9 +31,9 @@ export const login = (email, password) => {
   return signInWithEmailAndPassword(auth, email, password);
 };
 
-export const addUser = (email, name) => {
-  return db.collection("users").add({
-    email: email,
-    name: name,
+export const addUser = (email, userName) => {
+  return addDoc(collection(db, "users"), {
+    email,
+    userName,
   });
 };

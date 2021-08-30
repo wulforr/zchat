@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory, Link } from "react-router-dom";
-import { signUp, addUser } from "../../utils/firebase";
+import { signUp, addUser, currentUser } from "../../utils/firebase";
 import "./Signup.css";
 
 export default function Signup() {
@@ -11,6 +11,12 @@ export default function Signup() {
   const [signupBtnText, setSignupBtnText] = useState("Signup");
   const [errorMsgText, setErrorMsgText] = useState("");
 
+  useEffect(() => {
+    if (currentUser) {
+      console.log(`User ${currentUser}`);
+      history.push("/watchers");
+    }
+  }, [history]);
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
@@ -40,9 +46,10 @@ export default function Signup() {
     setSignupBtnText("Signing up");
     try {
       await signUp(email, password);
-      addUser(email, password);
+      addUser(email, userName);
       history.push("/chats");
     } catch (err) {
+      console.log("err is", err);
       setErrorMsgText(err.message);
       setSignupBtnText("Signup");
     }

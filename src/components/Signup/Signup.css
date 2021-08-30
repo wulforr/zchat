@@ -48,6 +48,7 @@
   border: 1px solid var(--input-border);
   border-radius: 4px;
   background-color: var(--input-background);
+  color: #d0d0d0;
 }
 .signup-input-wrapper > .input-text:focus {
   border: 1.5px solid var(--link);
