@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useHistory, Link } from "react-router-dom";
+import { signUp, addUser } from "../../utils/firebase";
 import "./Signup.css";
-import * as firestoreService from "../../utils/firebase";
 
 export default function Signup() {
   const history = useHistory();
@@ -22,7 +22,8 @@ export default function Signup() {
   };
 
   const checkValidationAndSubmit = () => {
-    const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const emailRegex =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     if (password.length < 8) {
       return setErrorMsgText(
@@ -38,9 +39,8 @@ export default function Signup() {
   const handleSignup = async () => {
     setSignupBtnText("Signing up");
     try {
-      const res = await firestoreService.signUp(email, password);
-      console.log(res);
-      await firestoreService.addUser(email, userName);
+      await signUp(email, password);
+      addUser(email, password);
       history.push("/chats");
     } catch (err) {
       setErrorMsgText(err.message);
@@ -56,7 +56,7 @@ export default function Signup() {
           <label>Username:</label>
           <input
             type="text"
-            className="inputText"
+            className="input-text"
             value={userName}
             onChange={handleUserNameChange}
           />
@@ -65,7 +65,7 @@ export default function Signup() {
           <label>Email:</label>
           <input
             type="text"
-            className="inputText"
+            className="input-text"
             value={email}
             onChange={handleEmailChange}
           />
@@ -74,7 +74,7 @@ export default function Signup() {
           <label>Password:</label>
           <input
             type="text"
-            className="inputText"
+            className="input-text"
             value={password}
             onChange={handlePasswordChange}
           />
@@ -83,9 +83,9 @@ export default function Signup() {
           {signupBtnText}
         </button>
         <div className="signup-error-msg">{errorMsgText}</div>
-        <div className="loginText">
+        <div className="login-text">
           Already a user
-          <Link to="/login" className="loginTextLink loginText">
+          <Link to="/login" className="login-text-link login-text">
             {" Login"}
           </Link>
         </div>

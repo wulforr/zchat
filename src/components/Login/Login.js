@@ -1,64 +1,73 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory, Link } from "react-router-dom";
-// import "./Signup.css";
-import * as firestoreService from "../../utils/firebase";
+import { currentUser, login } from "../../utils/firebase";
+import "./Login.css";
 
-export default function Signup() {
+export default function Login() {
   const history = useHistory();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+
   const [loginBtnText, setLoginBtnText] = useState("Login");
   const [errorMsgText, setErrorMsgText] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
+  useEffect(() => {
+    if (currentUser) {
+      history.push("/watchers");
+    }
+  }, [history]);
+
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
 
-  const handleLogin = async () => {
-    setLoginBtnText("Logging in");
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoginBtnText("Logging in...");
     try {
-      const res = await firestoreService.login(email, password);
-      window.localStorage.setItem("loggedUser", JSON.stringify(res));
-      history.push("/chats");
+      await login(email, password);
+      history.push("/watchers");
     } catch (err) {
-      setErrorMsgText(err.message);
       setLoginBtnText("Login");
+      setErrorMsgText("Username or Password is incorrect");
     }
   };
 
   return (
-    <div className="signup-div">
-      <div className="signup-container">
+    <div className="loginWrapper">
+      <div className="loginContainer">
         <h1>Login</h1>
-        <div className="signup-input-wrapper">
-          <label>Email:</label>
+        <div className="formRow">
+          <label>Email</label>
           <input
-            type="text"
-            className="inputText"
-            value={email}
+            type="email"
             onChange={handleEmailChange}
-          />
-        </div>
-        <div className="signup-input-wrapper">
-          <label>Password:</label>
-          <input
-            type="text"
+            value={email}
             className="inputText"
-            value={password}
-            onChange={handlePasswordChange}
           />
         </div>
-        <button className="btn signup-btn" onClick={handleLogin}>
+
+        <div className="formRow">
+          <label>Password</label>
+          <input
+            type="password"
+            onChange={handlePasswordChange}
+            value={password}
+            className="inputText"
+          />
+        </div>
+        <button onClick={handleLogin} className="btn loginBtn">
           {loginBtnText}
         </button>
-        <div className="signup-error-msg">{errorMsgText}</div>
+        <div className="loginErrorMsg">{errorMsgText}</div>
         <div className="loginText">
-          Already a user
-          <Link to="/login" className="loginTextLink loginText">
-            {" Login"}
+          Don't have an account?
+          <Link to="/signup" className="signupTextLink">
+            {" Register for free"}
           </Link>
         </div>
       </div>

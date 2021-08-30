@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: #f0f0f0;
 }
 
 code {
@@ -15,6 +16,22 @@ code {
 html {
   --scrollbarBG: transparent;
   --thumbBG: #90a4ae;
+  --base: #19191b;
+  --black: hsl(240, 16%, 16%);
+  --page-base: hsl(240, 4%, 13%);
+  --button-border: var(--link);
+  --button-background: var(--base);
+  --button-primary: var(--link);
+  --ink-600: hsla(0, 79%, 72%, 0.8);
+  --ink-700: hsl(0, 79%, 72%);
+  --ink-900: hsl(0, 100%, 73%);
+  --link: hsl(206, 75%, 48%);
+  --bg-light-blue: hsla(206, 74%, 43%, 0.2);
+  --bg-light-blue-border: 1px solid hsla(206, 74%, 43%, 0.04);
+  --border-color: hsla(216, 41%, 87%, 0.8);
+  --stripes: hsl(245, 40%, 98%);
+  --input-border: var(--button-border);
+  --input-background: hsl(0, 0%, 2%);
 }
 body::-webkit-scrollbar {
   width: 11px;
