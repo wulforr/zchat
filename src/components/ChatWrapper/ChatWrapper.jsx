@@ -10,6 +10,8 @@ import { generateData } from "../../utils/fakedata";
 import { addMessage } from "../../utils/utils";
 import AddChat from "../AddChat/AddChat";
 import { addChatUser } from "../../utils/utils";
+import { useHistory } from "react-router-dom";
+import { auth } from "../../utils/firebase";
 
 export default function ChatWrapper() {
   const [data, setData] = useState(null);
@@ -19,13 +21,19 @@ export default function ChatWrapper() {
   const [filteredData, setFilteredData] = useState(null);
 
   const chatListref = useRef(null);
+  const history = useHistory();
 
   // add some fake data
   useEffect(() => {
-    let tempData = generateData();
-    setData(tempData);
-    setFilteredData(tempData);
-  }, []);
+    console.log(`user`, auth.currentUser);
+    if (auth.currentUser) {
+      let tempData = generateData();
+      setData(tempData);
+      setFilteredData(tempData);
+    } else {
+      history.push("/");
+    }
+  }, [history]);
 
   // filtering data according to search query and sorting it according to time so most recent chat will be shown at top
   useEffect(() => {

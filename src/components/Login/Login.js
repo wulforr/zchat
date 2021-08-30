@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, Link } from "react-router-dom";
-import { currentUser, login } from "../../utils/firebase";
+import { auth, login } from "../../utils/firebase";
 import "./Login.css";
 
 export default function Login() {
@@ -12,8 +12,8 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    if (currentUser) {
-      history.push("/watchers");
+    if (auth.currentUser) {
+      history.push("/chat");
     }
   }, [history]);
 

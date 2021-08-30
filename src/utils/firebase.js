@@ -19,21 +19,36 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const auth = getAuth();
+export const auth = getAuth();
 
-export const currentUser = auth.currentUser;
-
-export const signUp = (email, password) => {
-  return createUserWithEmailAndPassword(auth, email, password);
+export const signUp = async (email, password, userName) => {
+  try {
+    await createUserWithEmailAndPassword(auth, email, password);
+    await addUser(email, userName);
+  } catch (err) {
+    return err;
+  }
 };
 
-export const login = (email, password) => {
-  return signInWithEmailAndPassword(auth, email, password);
+export const login = async (email, password) => {
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+  } catch (err) {
+    return err;
+  }
 };
 
-export const addUser = (email, userName) => {
+const addUser = (email, userName) => {
   return addDoc(collection(db, "users"), {
     email,
     userName,
   });
+};
+
+export const signOut = async () => {
+  try {
+    await auth.signOut();
+  } catch (err) {
+    return err;
+  }
 };
