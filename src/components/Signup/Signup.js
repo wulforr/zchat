@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, Link } from "react-router-dom";
-import { signUp, auth } from "../../utils/firebase";
+import { signUp, auth, addUser } from "../../utils/firebase";
 import "./Signup.css";
 
 export default function Signup() {
@@ -45,6 +45,7 @@ export default function Signup() {
     setSignupBtnText("Signing up");
     try {
       await signUp(email, password, userName);
+      await addUser(email, userName);
       history.push("/chat");
     } catch (err) {
       console.log("err is", err);

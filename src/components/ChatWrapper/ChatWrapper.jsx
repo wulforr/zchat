@@ -31,7 +31,7 @@ export default function ChatWrapper() {
       setData(tempData);
       setFilteredData(tempData);
     } else {
-      history.push("/");
+      history.push("/login");
     }
   }, [history]);
 

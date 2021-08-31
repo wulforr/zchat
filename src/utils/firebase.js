@@ -21,34 +21,22 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 export const auth = getAuth();
 
-export const signUp = async (email, password, userName) => {
-  try {
-    await createUserWithEmailAndPassword(auth, email, password);
-    await addUser(email, userName);
-  } catch (err) {
-    return err;
-  }
+export const signUp = (email, password) => {
+  return createUserWithEmailAndPassword(auth, email, password);
 };
 
-export const login = async (email, password) => {
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
-  } catch (err) {
-    return err;
-  }
+export const login = (email, password) => {
+  return signInWithEmailAndPassword(auth, email, password);
 };
 
-const addUser = (email, userName) => {
+export const addUser = (email, userName) => {
   return addDoc(collection(db, "users"), {
     email,
     userName,
+    avatar: `https://avatars.dicebear.com/api/gridy/${email}.svg`,
   });
 };
 
-export const signOut = async () => {
-  try {
-    await auth.signOut();
-  } catch (err) {
-    return err;
-  }
+export const signOut = () => {
+  return auth.signOut();
 };
