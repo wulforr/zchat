@@ -43,16 +43,22 @@ export default function ChatWrapper() {
           onSnapshot(
             collection(db, "chats", chat.id, "messages"),
             (querySnapshot) => {
+              let messages = [];
               querySnapshot.forEach((doc) => {
-                tempChats[index].messages = [
-                  ...tempChats[index].messages,
-                  { id: doc.id, ...doc.data() },
-                ];
+                messages.push({
+                  messageId: doc.id,
+                  ...doc.data(),
+                });
+                tempChats[index].messages = messages;
               });
+              setFilteredData(tempChats);
+              setData(tempChats);
               console.log("chatsWithMessage", tempChats);
             }
           );
         });
+        setFilteredData(tempChats);
+        setData(tempChats);
       });
       return () => unsubscribe();
     } else {
@@ -95,6 +101,9 @@ export default function ChatWrapper() {
     const updatedData = addChatUser(data, name);
     setData(updatedData);
   };
+
+  console.log("data is", data);
+  console.log("filteredData is", filteredData);
 
   return data && data.length ? (
     <div className="chat-container">
