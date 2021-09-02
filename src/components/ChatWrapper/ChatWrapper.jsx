@@ -11,7 +11,8 @@ import { addMessage } from "../../utils/utils";
 import AddChat from "../AddChat/AddChat";
 import { addChatUser } from "../../utils/utils";
 import { useHistory } from "react-router-dom";
-import { auth } from "../../utils/firebase";
+import { auth, db } from "../../utils/firebase";
+import { query, onSnapshot, where, collection, doc } from "firebase/firestore";
 
 export default function ChatWrapper() {
   const [data, setData] = useState(null);
@@ -27,9 +28,33 @@ export default function ChatWrapper() {
   useEffect(() => {
     console.log(`user`, auth.currentUser);
     if (auth.currentUser) {
-      let tempData = generateData();
-      setData(tempData);
-      setFilteredData(tempData);
+      const chatsRef = collection(db, "chats");
+      const q = query(
+        chatsRef,
+        where("participants", "array-contains", auth.currentUser.uid)
+      );
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        let tempChats = [];
+        querySnapshot.forEach((doc) => {
+          tempChats.push({ id: doc.id, ...doc.data(), messages: [] });
+        });
+        console.log("tempChats", tempChats);
+        tempChats.forEach((chat, index) => {
+          onSnapshot(
+            collection(db, "chats", chat.id, "messages"),
+            (querySnapshot) => {
+              querySnapshot.forEach((doc) => {
+                tempChats[index].messages = [
+                  ...tempChats[index].messages,
+                  { id: doc.id, ...doc.data() },
+                ];
+              });
+              console.log("chatsWithMessage", tempChats);
+            }
+          );
+        });
+      });
+      return () => unsubscribe();
     } else {
       history.push("/login");
     }

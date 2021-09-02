@@ -41,7 +41,7 @@ export default function Login() {
     <div className="loginWrapper">
       <div className="loginContainer">
         <h1>Login</h1>
-        <div className="formRow">
+        <div className="login-formRow">
           <label>Email</label>
           <input
             type="email"
@@ -51,7 +51,7 @@ export default function Login() {
           />
         </div>
 
-        <div className="formRow">
+        <div className="login-formRow">
           <label>Password</label>
           <input
             type="password"

@@ -21,22 +21,23 @@
   margin: 1.5rem;
 }
 
-.formRow {
+.login-formRow {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
   margin: 3% 0;
 }
 
-.formRow > .inputText {
+.login-formRow > .inputText {
   width: 100%;
   padding: 3%;
   margin: 1% 0;
   border: 1px solid var(--input-border);
   border-radius: 4px;
   background-color: var(--input-background);
+  color: #fff;
 }
-.formRow > .inputText:focus {
+.login-formRow > .inputText:focus {
   border: 1.5px solid var(--link);
   outline: none;
 }
@@ -72,17 +73,17 @@
     box-shadow: 0 23px 20px -24px hsl(219deg 37% 18% / 24%);
     border-radius: 0.75rem;
   }
-  .formRow {
+  .login-formRow {
     width: 100%;
   }
 
-  .formRow > .inputText {
+  .login-formRow > .inputText {
     width: 100%;
     padding: 0.75rem;
     border: 1px solid #1b86d6;
     border-radius: 4px;
   }
-  .formRow > .inputText:focus {
+  .login-formRow > .inputText:focus {
     border: 1.5px solid var(--link);
     outline: 0;
   }
