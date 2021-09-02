@@ -1,4 +1,6 @@
 import faker from "faker";
+import { db } from "./firebase.js";
+import { doc, getDoc } from "firebase/firestore";
 
 //if text length is greater than max length return trimmed text
 export const getFormattedText = (text, maxLength) => {
@@ -18,7 +20,7 @@ export const getTime = (data) => {
     return "";
   }
   const lastMessageTime = data.messages.slice(-1)[0].time;
-  const lastMessageDate = new Date(lastMessageTime);
+  const lastMessageDate = lastMessageTime.toDate();
   const currentDate = new Date();
 
   if (currentDate.getFullYear() - lastMessageDate.getFullYear() > 0) {
@@ -73,4 +75,15 @@ export const addChatUser = (data, name) => {
       messages: [],
     },
   ];
+};
+
+export const getImageUrl = async (data, currentUserId) => {
+  console.log("currentUserId", currentUserId);
+  const userId = data.participants.filter((id) => id !== currentUserId)[0];
+  console.log("userId is", userId, data);
+  const docRef = doc(db, "users", userId);
+  const docSnap = await getDoc(docRef);
+  const result = docSnap.data();
+  console.log("result is ", result);
+  return result;
 };

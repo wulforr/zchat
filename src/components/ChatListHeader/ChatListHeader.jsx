@@ -6,7 +6,7 @@ import { IoLogOut } from "react-icons/io5";
 import { signOut } from "../../utils/firebase";
 import { useHistory } from "react-router";
 
-export default function ChatListHeader({ chatListref }) {
+export default function ChatListHeader({ chatListRef }) {
   const history = useHistory();
   const handleSignOut = async () => {
     try {
@@ -22,7 +22,7 @@ export default function ChatListHeader({ chatListref }) {
         <div
           className="chat-list-header-back-btn"
           onClick={() => {
-            chatListref.current.classList.remove("chat-list-show");
+            chatListRef.current.classList.remove("chat-list-show");
           }}
         >
           <IoMdArrowRoundBack />

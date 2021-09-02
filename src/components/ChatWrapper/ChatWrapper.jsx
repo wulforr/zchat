@@ -6,13 +6,18 @@ import ChatSearchBar from "../ChatSearchBar/ChatSearchBar";
 import ChatDetailsHeader from "../ChatDetailsHeader/ChatDetailsHeader";
 import ChatMessages from "../ChatMessages/ChatMessages";
 import ChatInput from "../ChatInput/ChatInput";
-import { generateData } from "../../utils/fakedata";
 import { addMessage } from "../../utils/utils";
 import AddChat from "../AddChat/AddChat";
 import { addChatUser } from "../../utils/utils";
 import { useHistory } from "react-router-dom";
 import { auth, db } from "../../utils/firebase";
-import { query, onSnapshot, where, collection, doc } from "firebase/firestore";
+import {
+  query,
+  onSnapshot,
+  where,
+  collection,
+  orderBy,
+} from "firebase/firestore";
 
 export default function ChatWrapper() {
   const [data, setData] = useState(null);
@@ -21,12 +26,11 @@ export default function ChatWrapper() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredData, setFilteredData] = useState(null);
 
-  const chatListref = useRef(null);
+  const chatListRef = useRef(null);
   const history = useHistory();
 
   // add some fake data
   useEffect(() => {
-    console.log(`user`, auth.currentUser);
     if (auth.currentUser) {
       const chatsRef = collection(db, "chats");
       const q = query(
@@ -38,10 +42,12 @@ export default function ChatWrapper() {
         querySnapshot.forEach((doc) => {
           tempChats.push({ id: doc.id, ...doc.data(), messages: [] });
         });
-        console.log("tempChats", tempChats);
         tempChats.forEach((chat, index) => {
           onSnapshot(
-            collection(db, "chats", chat.id, "messages"),
+            query(
+              collection(db, "chats", chat.id, "messages"),
+              orderBy("time")
+            ),
             (querySnapshot) => {
               let messages = [];
               querySnapshot.forEach((doc) => {
@@ -53,7 +59,6 @@ export default function ChatWrapper() {
               });
               setFilteredData(tempChats);
               setData(tempChats);
-              console.log("chatsWithMessage", tempChats);
             }
           );
         });
@@ -69,6 +74,7 @@ export default function ChatWrapper() {
   // filtering data according to search query and sorting it according to time so most recent chat will be shown at top
   useEffect(() => {
     if (data) {
+      console.log("running useEffecrt");
       let tempFilteredData = data.filter((ele) =>
         new RegExp(searchQuery, "gi").test(ele.name)
       );
@@ -79,6 +85,7 @@ export default function ChatWrapper() {
         } else if (b.messages.length === 0) {
           return true;
         } else {
+          console.log("sorting", a.messages, a.messages.slice(-1)[0]);
           return (
             new Date(b.messages.slice(-1)[0].time) -
             new Date(a.messages.slice(-1)[0].time)
@@ -102,23 +109,21 @@ export default function ChatWrapper() {
     setData(updatedData);
   };
 
-  console.log("data is", data);
-  console.log("filteredData is", filteredData);
-
+  console.log("filtered Data is", filteredData);
   return data && data.length ? (
     <div className="chat-container">
       <div
         className="chat-hamburger"
         onClick={() => {
-          chatListref.current.classList.add("chat-list-show");
+          chatListRef.current.classList.add("chat-list-show");
         }}
       >
         <div></div>
         <div></div>
         <div></div>
       </div>
-      <div className="chat-list" ref={chatListref}>
-        <ChatListHeader chatListref={chatListref} />
+      <div className="chat-list" ref={chatListRef}>
+        <ChatListHeader chatListRef={chatListRef} />
         <ChatSearchBar
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
@@ -129,7 +134,7 @@ export default function ChatWrapper() {
             key={ele.id}
             data={ele}
             setCurrentChat={setCurrentChat}
-            chatListref={chatListref}
+            chatListRef={chatListRef}
           />
         ))}
       </div>

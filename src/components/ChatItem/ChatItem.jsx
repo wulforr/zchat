@@ -1,19 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./ChatItem.css";
-import { getFormattedText, getTime } from "../../utils/utils";
+import { getFormattedText, getTime, getImageUrl } from "../../utils/utils";
+import { auth } from "../../utils/firebase";
 
-export default function ChatItem({ data, setCurrentChat, chatListref }) {
+export default function ChatItem({ data, setCurrentChat, chatListRef }) {
+  const [imageUrl, setImageUrl] = useState("");
+  useEffect(() => {
+    const getImage = async () => {
+      const tempImageUrl = await getImageUrl(data, auth.currentUser.uid);
+      setImageUrl(tempImageUrl.avatar);
+    };
+    getImage();
+  }, [data]);
   return (
     <div
       className="chat-item-wrapper"
       onClick={() => {
         setCurrentChat(data);
-        chatListref.current.classList.remove("chat-list-show");
+        chatListRef.current.classList.remove("chat-list-show");
       }}
     >
       <div className="chat-item-left">
         <div className="chat-item-avatar">
-          <img src={data.image} alt="avatar" />
+          <img src={imageUrl} alt="avatar" />
         </div>
       </div>
       <div className="chat-item-right">
