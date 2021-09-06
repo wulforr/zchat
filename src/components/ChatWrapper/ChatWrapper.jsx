@@ -6,11 +6,9 @@ import ChatSearchBar from "../ChatSearchBar/ChatSearchBar";
 import ChatDetailsHeader from "../ChatDetailsHeader/ChatDetailsHeader";
 import ChatMessages from "../ChatMessages/ChatMessages";
 import ChatInput from "../ChatInput/ChatInput";
-import { addMessage } from "../../utils/utils";
 import AddChat from "../AddChat/AddChat";
-import { addChatUser } from "../../utils/utils";
 import { useHistory } from "react-router-dom";
-import { auth, db } from "../../utils/firebase";
+import { auth, db, addNewChat, addMessage } from "../../utils/firebase";
 import {
   query,
   onSnapshot,
@@ -74,39 +72,45 @@ export default function ChatWrapper() {
   // filtering data according to search query and sorting it according to time so most recent chat will be shown at top
   useEffect(() => {
     if (data) {
-      console.log("running useEffecrt");
+      console.log("running useEffect");
       let tempFilteredData = data.filter((ele) =>
         new RegExp(searchQuery, "gi").test(ele.name)
       );
 
-      let tempFilteredSortedData = tempFilteredData.sort((a, b) => {
-        if (a.messages.length === 0) {
-          return true;
-        } else if (b.messages.length === 0) {
-          return true;
-        } else {
-          console.log("sorting", a.messages, a.messages.slice(-1)[0]);
-          return (
-            new Date(b.messages.slice(-1)[0].time) -
-            new Date(a.messages.slice(-1)[0].time)
-          );
-        }
-      });
-      setFilteredData(tempFilteredSortedData);
+      // let tempFilteredSortedData = tempFilteredData.sort((a, b) => {
+      //   if (a.messages.length === 0) {
+      //     return true;
+      //   } else if (b.messages.length === 0) {
+      //     return true;
+      //   } else {
+      //     console.log("sorting", a.messages, a.messages.slice(-1)[0]);
+      //     return (
+      //       new Date(b.messages.slice(-1)[0].time) -
+      //       new Date(a.messages.slice(-1)[0].time)
+      //     );
+      //   }
+      // });
+      setFilteredData(tempFilteredData);
     }
   }, [searchQuery, data]);
 
   //adding message to the data and then updating state and current chat after adding message and clearing the input field
-  const addMsg = (msg) => {
-    const updatedData = addMessage(data, msg, currentChat.id);
-    setData(updatedData);
-    setCurrentChat(updatedData.filter((ele) => ele.id === currentChat.id)[0]);
-    setInputValue("");
+  const addMsg = async (msg) => {
+    try {
+      await addMessage(msg, auth.currentUser.uid, currentChat.id);
+      setInputValue("");
+    } catch (err) {
+      console.log("err", err);
+    }
   };
 
-  const addChat = (name) => {
-    const updatedData = addChatUser(data, name);
-    setData(updatedData);
+  const addChat = async (userName) => {
+    try {
+      addNewChat(data, userName, auth.currentUser.uid);
+    } catch (err) {
+      console.log("err");
+    }
+    // setData(updatedData);
   };
 
   console.log("filtered Data is", filteredData);
@@ -142,7 +146,10 @@ export default function ChatWrapper() {
         {currentChat ? (
           <>
             <ChatDetailsHeader currentChat={currentChat} />
-            <ChatMessages currentChat={currentChat} />
+            <ChatMessages
+              currentChat={currentChat}
+              currentUser={auth.currentUser.uid}
+            />
             <ChatInput
               value={inputValue}
               setInputValue={setInputValue}

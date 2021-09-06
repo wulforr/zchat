@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, Link } from "react-router-dom";
-import { signUp, auth, addUser } from "../../utils/firebase";
+import { signUp, auth, addUser, isUserNameUnique } from "../../utils/firebase";
 import "./Signup.css";
 
 export default function Signup() {
@@ -44,9 +44,15 @@ export default function Signup() {
   const handleSignup = async () => {
     setSignupBtnText("Signing up");
     try {
-      await signUp(email, password, userName);
-      await addUser(email, userName);
-      history.push("/chat");
+      const isUnique = await isUserNameUnique(userName);
+      console.log("isUnique", isUnique);
+      if (isUnique) {
+        await signUp(email, password, userName);
+        await addUser(email, userName);
+        history.push("/chat");
+      } else {
+        setErrorMsgText("The userName is already registered");
+      }
     } catch (err) {
       console.log("err is", err);
       setErrorMsgText(err.message);

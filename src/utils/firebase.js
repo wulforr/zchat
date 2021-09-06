@@ -1,5 +1,13 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  query,
+  where,
+  getDocs,
+  Timestamp,
+} from "firebase/firestore";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -22,6 +30,7 @@ export const db = getFirestore(app);
 export const auth = getAuth();
 
 export const signUp = (email, password) => {
+  console.log("signing up");
   return createUserWithEmailAndPassword(auth, email, password);
 };
 
@@ -39,4 +48,44 @@ export const addUser = (email, userName) => {
 
 export const signOut = () => {
   return auth.signOut();
+};
+
+const getDocsFromUserName = async (userName) => {
+  const q = query(collection(db, "users"), where("userName", "==", userName));
+  const docs = await getDocs(q);
+  const docsWithSameUserName = [];
+  docs.forEach((doc) => {
+    docsWithSameUserName.push({ id: doc.id, data: doc.data() });
+  });
+  return docsWithSameUserName;
+};
+
+export const isUserNameUnique = async (userName) => {
+  const users = await getDocsFromUserName(userName);
+  console.log("docs oin ", users);
+  return users.length ? false : true;
+};
+
+export const addNewChat = async (data, userName, currentUserId) => {
+  const users = await getDocsFromUserName(userName);
+  if (users) {
+    const userId = users[0].id;
+    return addDoc(collection(db, "chats"), {
+      participants: [currentUserId, userId],
+      name: userName,
+      type: "chat",
+    });
+  } else {
+    throw new Error("No user with this userName found");
+  }
+};
+
+export const addMessage = async (message, senderId, chatId) => {
+  return addDoc(collection(db, "chats", chatId, "messages"), {
+    text: message,
+    time: Timestamp.now(),
+    sender: {
+      id: senderId,
+    },
+  });
 };

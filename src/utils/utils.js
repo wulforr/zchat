@@ -42,41 +42,6 @@ export const getTime = (data) => {
   return time;
 };
 
-//add message to the chat in the data
-export const addMessage = (data, message, chatId) => {
-  const updatedData = data.map((ele) => {
-    if (ele.id === chatId) {
-      return {
-        ...ele,
-        messages: [
-          ...ele.messages,
-          {
-            messageId: faker.random.uuid(),
-            text: message,
-            time: new Date(),
-            sender: "user2",
-          },
-        ],
-      };
-    }
-    return ele;
-  });
-  return updatedData;
-};
-
-export const addChatUser = (data, name) => {
-  return [
-    ...data,
-    {
-      id: faker.random.uuid(),
-      name: name,
-      image: faker.image.avatar(),
-      status: faker.lorem.text(),
-      messages: [],
-    },
-  ];
-};
-
 export const getImageUrl = async (data, currentUserId) => {
   console.log("currentUserId", currentUserId);
   const userId = data.participants.filter((id) => id !== currentUserId)[0];
