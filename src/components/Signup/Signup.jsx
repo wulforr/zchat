@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, Link } from "react-router-dom";
-import { signUp, auth, addUser, isUserNameUnique } from "../../utils/firebase";
+import { signUp, addUser, isUserNameUnique } from "../../utils/firebase";
 import "./Signup.css";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export default function Signup() {
   const history = useHistory();
@@ -12,9 +13,12 @@ export default function Signup() {
   const [errorMsgText, setErrorMsgText] = useState("");
 
   useEffect(() => {
-    if (auth.currentUser) {
-      history.push("/chat");
-    }
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        history.push("/chat");
+      }
+    });
   }, [history]);
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
@@ -45,10 +49,9 @@ export default function Signup() {
     setSignupBtnText("Signing up");
     try {
       const isUnique = await isUserNameUnique(userName);
-      console.log("isUnique", isUnique);
       if (isUnique) {
-        await signUp(email, password, userName);
-        await addUser(email, userName);
+        const newUser = await signUp(email, password, userName);
+        await addUser(email, userName, newUser.user.uid);
         history.push("/chat");
       } else {
         setErrorMsgText("The userName is already registered");

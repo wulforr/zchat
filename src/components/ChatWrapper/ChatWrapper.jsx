@@ -8,7 +8,7 @@ import ChatMessages from "../ChatMessages/ChatMessages";
 import ChatInput from "../ChatInput/ChatInput";
 import AddChat from "../AddChat/AddChat";
 import { useHistory } from "react-router-dom";
-import { auth, db, addNewChat, addMessage } from "../../utils/firebase";
+import { db, addNewChat, addMessage } from "../../utils/firebase";
 import {
   query,
   onSnapshot,
@@ -16,8 +16,10 @@ import {
   collection,
   orderBy,
 } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export default function ChatWrapper() {
+  const [user, setUser] = useState(null);
   const [data, setData] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const [currentChat, setCurrentChat] = useState(null);
@@ -27,13 +29,24 @@ export default function ChatWrapper() {
   const chatListRef = useRef(null);
   const history = useHistory();
 
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        history.push("/login");
+      }
+    });
+  }, [history]);
+
   // add some fake data
   useEffect(() => {
-    if (auth.currentUser) {
+    if (user) {
       const chatsRef = collection(db, "chats");
       const q = query(
         chatsRef,
-        where("participants", "array-contains", auth.currentUser.uid)
+        where("participants", "array-contains", user.uid)
       );
       const unsubscribe = onSnapshot(q, (querySnapshot) => {
         let tempChats = [];
@@ -64,15 +77,12 @@ export default function ChatWrapper() {
         setData(tempChats);
       });
       return () => unsubscribe();
-    } else {
-      history.push("/login");
     }
-  }, [history]);
+  }, [user]);
 
   // filtering data according to search query and sorting it according to time so most recent chat will be shown at top
   useEffect(() => {
     if (data) {
-      console.log("running useEffect");
       let tempFilteredData = data.filter((ele) =>
         new RegExp(searchQuery, "gi").test(ele.name)
       );
@@ -97,7 +107,7 @@ export default function ChatWrapper() {
   //adding message to the data and then updating state and current chat after adding message and clearing the input field
   const addMsg = async (msg) => {
     try {
-      await addMessage(msg, auth.currentUser.uid, currentChat.id);
+      await addMessage(msg, user.uid, currentChat.id);
       setInputValue("");
     } catch (err) {
       console.log("err", err);
@@ -106,15 +116,14 @@ export default function ChatWrapper() {
 
   const addChat = async (userName) => {
     try {
-      addNewChat(data, userName, auth.currentUser.uid);
+      addNewChat(data, userName, user.uid);
     } catch (err) {
       console.log("err");
     }
     // setData(updatedData);
   };
 
-  console.log("filtered Data is", filteredData);
-  return data && data.length ? (
+  return data ? (
     <div className="chat-container">
       <div
         className="chat-hamburger"
@@ -139,17 +148,18 @@ export default function ChatWrapper() {
             data={ele}
             setCurrentChat={setCurrentChat}
             chatListRef={chatListRef}
+            currentUserId={user.uid}
           />
         ))}
       </div>
       <div className="chat-details">
         {currentChat ? (
           <>
-            <ChatDetailsHeader currentChat={currentChat} />
-            <ChatMessages
+            <ChatDetailsHeader
               currentChat={currentChat}
-              currentUser={auth.currentUser.uid}
+              currentUserId={user.uid}
             />
+            <ChatMessages currentChat={currentChat} currentUserId={user.uid} />
             <ChatInput
               value={inputValue}
               setInputValue={setInputValue}
@@ -158,7 +168,7 @@ export default function ChatWrapper() {
           </>
         ) : (
           <div className="chat-initial-screen">
-            <h1>Welcome, Shaurya</h1>
+            <h1>Welcome, {user.userName}</h1>
             <div className="chat-initial-image-wrapper">
               <img src="https://i.imgur.com/jA7j4Qx.jpg" alt="avatar" />
             </div>

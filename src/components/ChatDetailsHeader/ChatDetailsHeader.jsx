@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
 import "./ChatDetailsHeader.css";
 import { getImageUrl } from "../../utils/utils";
-import { auth } from "../../utils/firebase";
 
-export default function ChatDetailsHeader({ currentChat }) {
+export default function ChatDetailsHeader({ currentChat, currentUserId }) {
   const [imageUrl, setImageUrl] = useState("");
   useEffect(() => {
     const getImage = async () => {
-      const tempImageUrl = await getImageUrl(currentChat, auth.currentUser.uid);
+      const tempImageUrl = await getImageUrl(currentChat, currentUserId);
       setImageUrl(tempImageUrl.avatar);
     };
     getImage();
-  }, [currentChat]);
-  console.log("current chat: ", currentChat);
+  }, [currentChat, currentUserId]);
   return currentChat ? (
     <div className="chat-details-header-wrapper">
       <div className="chat-details-header-left">

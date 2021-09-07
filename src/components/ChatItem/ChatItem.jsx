@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from "react";
 import "./ChatItem.css";
 import { getFormattedText, getTime, getImageUrl } from "../../utils/utils";
-import { auth } from "../../utils/firebase";
 
-export default function ChatItem({ data, setCurrentChat, chatListRef }) {
+export default function ChatItem({
+  data,
+  setCurrentChat,
+  chatListRef,
+  currentUserId,
+}) {
   const [imageUrl, setImageUrl] = useState("");
   useEffect(() => {
     const getImage = async () => {
-      const tempImageUrl = await getImageUrl(data, auth.currentUser.uid);
+      const tempImageUrl = await getImageUrl(data, currentUserId);
       setImageUrl(tempImageUrl.avatar);
     };
     getImage();
-  }, [data]);
+  }, [data, currentUserId]);
   return (
     <div
       className="chat-item-wrapper"

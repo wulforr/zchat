@@ -1,4 +1,3 @@
-import faker from "faker";
 import { db } from "./firebase.js";
 import { doc, getDoc } from "firebase/firestore";
 
@@ -43,12 +42,9 @@ export const getTime = (data) => {
 };
 
 export const getImageUrl = async (data, currentUserId) => {
-  console.log("currentUserId", currentUserId);
   const userId = data.participants.filter((id) => id !== currentUserId)[0];
-  console.log("userId is", userId, data);
   const docRef = doc(db, "users", userId);
   const docSnap = await getDoc(docRef);
   const result = docSnap.data();
-  console.log("result is ", result);
   return result;
 };

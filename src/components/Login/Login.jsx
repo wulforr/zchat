@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, Link } from "react-router-dom";
-import { auth, login } from "../../utils/firebase";
+import { login } from "../../utils/firebase";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
 import "./Login.css";
 
 export default function Login() {
@@ -12,9 +14,12 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    if (auth.currentUser) {
-      history.push("/chat");
-    }
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        history.push("/chat");
+      }
+    });
   }, [history]);
 
   const handleEmailChange = (e) => {

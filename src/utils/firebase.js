@@ -7,6 +7,8 @@ import {
   where,
   getDocs,
   Timestamp,
+  setDoc,
+  doc,
 } from "firebase/firestore";
 import {
   getAuth,
@@ -38,8 +40,8 @@ export const login = (email, password) => {
   return signInWithEmailAndPassword(auth, email, password);
 };
 
-export const addUser = (email, userName) => {
-  return addDoc(collection(db, "users"), {
+export const addUser = (email, userName, uid) => {
+  return setDoc(doc(db, "users", uid), {
     email,
     userName,
     avatar: `https://avatars.dicebear.com/api/gridy/${email}.svg`,
