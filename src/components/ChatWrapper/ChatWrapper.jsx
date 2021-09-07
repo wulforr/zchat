@@ -25,6 +25,7 @@ export default function ChatWrapper() {
   const [currentChat, setCurrentChat] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredData, setFilteredData] = useState(null);
+  const [chats, setChats] = useState(null);
 
   const chatListRef = useRef(null);
   const history = useHistory();
@@ -40,7 +41,6 @@ export default function ChatWrapper() {
     });
   }, [history]);
 
-  // add some fake data
   useEffect(() => {
     if (user) {
       const chatsRef = collection(db, "chats");
@@ -53,32 +53,55 @@ export default function ChatWrapper() {
         querySnapshot.forEach((doc) => {
           tempChats.push({ id: doc.id, ...doc.data(), messages: [] });
         });
-        tempChats.forEach((chat, index) => {
-          onSnapshot(
-            query(
-              collection(db, "chats", chat.id, "messages"),
-              orderBy("time")
-            ),
-            (querySnapshot) => {
-              let messages = [];
-              querySnapshot.forEach((doc) => {
-                messages.push({
-                  messageId: doc.id,
-                  ...doc.data(),
-                });
-                tempChats[index].messages = messages;
-              });
-              setFilteredData(tempChats);
-              setData(tempChats);
-            }
-          );
-        });
-        setFilteredData(tempChats);
-        setData(tempChats);
+        setChats(tempChats);
       });
       return () => unsubscribe();
     }
   }, [user]);
+
+  useEffect(() => {
+    if (chats) {
+      let tempChats = chats;
+      let unsubscribeForChats = [];
+      tempChats.forEach((chat, index) => {
+        const unsubscribe = onSnapshot(
+          query(collection(db, "chats", chat.id, "messages"), orderBy("time")),
+          (querySnapshot) => {
+            console.log("some message added");
+            let messages = [];
+            querySnapshot.forEach((doc) => {
+              messages.push({
+                messageId: doc.id,
+                ...doc.data(),
+              });
+            });
+            tempChats[index].messages = messages;
+            console.log("setting filtered data", tempChats);
+            setFilteredData([...tempChats]);
+            setData([...tempChats]);
+          }
+        );
+        setFilteredData([...tempChats]);
+        setData([...tempChats]);
+        unsubscribeForChats = [...unsubscribeForChats, unsubscribe];
+      });
+      setFilteredData([...tempChats]);
+      setData([...tempChats]);
+      return () =>
+        unsubscribeForChats.forEach((unsubscribe) => {
+          unsubscribe();
+        });
+    }
+  }, [chats]);
+
+  useEffect(() => {
+    if (currentChat) {
+      setCurrentChat(
+        (currentChat) =>
+          filteredData.filter((data) => data.id === currentChat.id)[0]
+      );
+    }
+  }, [filteredData, currentChat]);
 
   // filtering data according to search query and sorting it according to time so most recent chat will be shown at top
   useEffect(() => {
@@ -87,19 +110,6 @@ export default function ChatWrapper() {
         new RegExp(searchQuery, "gi").test(ele.name)
       );
 
-      // let tempFilteredSortedData = tempFilteredData.sort((a, b) => {
-      //   if (a.messages.length === 0) {
-      //     return true;
-      //   } else if (b.messages.length === 0) {
-      //     return true;
-      //   } else {
-      //     console.log("sorting", a.messages, a.messages.slice(-1)[0]);
-      //     return (
-      //       new Date(b.messages.slice(-1)[0].time) -
-      //       new Date(a.messages.slice(-1)[0].time)
-      //     );
-      //   }
-      // });
       setFilteredData(tempFilteredData);
     }
   }, [searchQuery, data]);
@@ -122,6 +132,8 @@ export default function ChatWrapper() {
     }
     // setData(updatedData);
   };
+
+  console.log("filtered data is", filteredData);
 
   return data ? (
     <div className="chat-container">

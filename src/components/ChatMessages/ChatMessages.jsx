@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import "./ChatMessages.css";
 
-export default function ChatMessages({ currentChat, currentUserId }) {
+export default function ChatMessages({ currentChat, currentUser }) {
   const ChatMessagesContainerRef = useRef(null);
 
   // to scroll to the bottom of the chat so that most recent message is in view
@@ -16,7 +16,7 @@ export default function ChatMessages({ currentChat, currentUserId }) {
         <div className="chat-message-wrapper" key={message.messageId}>
           <div
             className={
-              message.sender.id === currentUserId
+              message.sender.id === currentUser.id
                 ? "chat-message-right"
                 : "chat-message-left"
             }
