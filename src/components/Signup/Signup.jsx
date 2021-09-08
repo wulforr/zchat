@@ -57,7 +57,7 @@ export default function Signup() {
         setErrorMsgText("The userName is already registered");
       }
     } catch (err) {
-      console.log("err is", err);
+      console.error("err is", err);
       setErrorMsgText(err.message);
       setSignupBtnText("Signup");
     }

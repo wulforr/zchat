@@ -33,7 +33,6 @@ export const db = getFirestore(app);
 export const auth = getAuth();
 
 export const signUp = (email, password) => {
-  console.log("signing up");
   return createUserWithEmailAndPassword(auth, email, password);
 };
 
@@ -65,7 +64,6 @@ const getDocsFromUserName = async (userName) => {
 
 export const isUserNameUnique = async (userName) => {
   const users = await getDocsFromUserName(userName);
-  console.log("docs oin ", users);
   return users.length ? false : true;
 };
 

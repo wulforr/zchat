@@ -122,7 +122,7 @@ export default function ChatWrapper() {
       await addMessage(msg, user.uid, currentChat.id);
       setInputValue("");
     } catch (err) {
-      console.log("err", err);
+      console.error("err", err);
     }
   };
 
@@ -130,12 +130,10 @@ export default function ChatWrapper() {
     try {
       addNewChat(data, userName, user.uid);
     } catch (err) {
-      console.log("err");
+      console.error("err", err);
     }
     // setData(updatedData);
   };
-
-  console.log("user is", user);
 
   return data ? (
     <div className="chat-container">
