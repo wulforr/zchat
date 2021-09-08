@@ -6,7 +6,7 @@ import { IoLogOut } from "react-icons/io5";
 import { signOut } from "../../utils/firebase";
 import { useHistory } from "react-router";
 
-export default function ChatListHeader({ chatListRef }) {
+export default function ChatListHeader({ chatListRef, userInfo }) {
   const history = useHistory();
   const handleSignOut = async () => {
     try {
@@ -28,9 +28,9 @@ export default function ChatListHeader({ chatListRef }) {
           <IoMdArrowRoundBack />
         </div>
         <div className="chat-list-header-avatar">
-          <img src="https://i.imgur.com/jA7j4Qx.jpg" alt="avatar" />
+          <img src={userInfo.avatar} alt="avatar" />
         </div>
-        <div className="chat-list-header-name">Shaurya</div>
+        <div className="chat-list-header-name">{userInfo.userName}</div>
       </div>
       <button onClick={handleSignOut}>
         <IoLogOut />

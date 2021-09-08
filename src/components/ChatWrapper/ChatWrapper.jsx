@@ -8,7 +8,7 @@ import ChatMessages from "../ChatMessages/ChatMessages";
 import ChatInput from "../ChatInput/ChatInput";
 import AddChat from "../AddChat/AddChat";
 import { useHistory } from "react-router-dom";
-import { db, addNewChat, addMessage } from "../../utils/firebase";
+import { db, addNewChat, addMessage, getUserInfo } from "../../utils/firebase";
 import {
   query,
   onSnapshot,
@@ -34,7 +34,11 @@ export default function ChatWrapper() {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        setUser(user);
+        const setUserName = async () => {
+          const userInfo = await getUserInfo(user.uid);
+          setUser({ ...user, ...userInfo });
+        };
+        setUserName();
       } else {
         history.push("/login");
       }
@@ -67,7 +71,6 @@ export default function ChatWrapper() {
         const unsubscribe = onSnapshot(
           query(collection(db, "chats", chat.id, "messages"), orderBy("time")),
           (querySnapshot) => {
-            console.log("some message added");
             let messages = [];
             querySnapshot.forEach((doc) => {
               messages.push({
@@ -76,7 +79,6 @@ export default function ChatWrapper() {
               });
             });
             tempChats[index].messages = messages;
-            console.log("setting filtered data", tempChats);
             setFilteredData([...tempChats]);
             setData([...tempChats]);
           }
@@ -133,7 +135,7 @@ export default function ChatWrapper() {
     // setData(updatedData);
   };
 
-  console.log("filtered data is", filteredData);
+  console.log("user is", user);
 
   return data ? (
     <div className="chat-container">
@@ -148,7 +150,7 @@ export default function ChatWrapper() {
         <div></div>
       </div>
       <div className="chat-list" ref={chatListRef}>
-        <ChatListHeader chatListRef={chatListRef} />
+        <ChatListHeader chatListRef={chatListRef} userInfo={user} />
         <ChatSearchBar
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
@@ -182,7 +184,7 @@ export default function ChatWrapper() {
           <div className="chat-initial-screen">
             <h1>Welcome, {user.userName}</h1>
             <div className="chat-initial-image-wrapper">
-              <img src="https://i.imgur.com/jA7j4Qx.jpg" alt="avatar" />
+              <img src={user.avatar} alt="avatar" />
             </div>
             <div className="chat-initial-screen-text">
               Search for someone or click on any chat to start chatting

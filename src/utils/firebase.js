@@ -9,6 +9,7 @@ import {
   Timestamp,
   setDoc,
   doc,
+  getDoc,
 } from "firebase/firestore";
 import {
   getAuth,
@@ -90,4 +91,9 @@ export const addMessage = async (message, senderId, chatId) => {
       id: senderId,
     },
   });
+};
+
+export const getUserInfo = async (userId) => {
+  const userInfo = await getDoc(doc(db, "users", userId));
+  return userInfo.data();
 };
