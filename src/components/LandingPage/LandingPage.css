@@ -17,6 +17,16 @@
 .landing-page-container > p {
   text-align: center;
   font-size: 1rem;
+  color: #dddddddf;
+}
+
+.landing-page-container > button {
+  padding: 1rem;
+  background-color: #000;
+  border: 1px solid #000;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 @media only screen and (min-width: 600px) {
