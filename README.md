@@ -55,4 +55,4 @@ This will start the application on port 3000 in your default browser.
 
 ### Technologies used
 
-ReactJs has been used to make this project and faker is used to create fake data for the application.
+ReactJs has been used to make this project and firebase is used for authentication and saving chats data.
