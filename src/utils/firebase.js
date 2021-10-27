@@ -69,7 +69,7 @@ export const isUserNameUnique = async (userName) => {
 
 export const addNewChat = async (data, userName, currentUserId) => {
   const users = await getDocsFromUserName(userName);
-  if (users) {
+  if (users && users.length) {
     const userId = users[0].id;
     return addDoc(collection(db, "chats"), {
       participants: [currentUserId, userId],
@@ -77,7 +77,7 @@ export const addNewChat = async (data, userName, currentUserId) => {
       type: "chat",
     });
   } else {
-    throw new Error("No user with this userName found");
+    alert("No user with this userName found");
   }
 };
 
